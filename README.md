@@ -44,7 +44,7 @@ standalone client handbook (.html, prints to PDF), Markdown, JSON, CSV, and a
 
 ```bash
 npm install
-npm run dev        # rebuilds into dist/ and serves it on http://localhost:1337
+npm run dev        # builds dist/, then rebuilds on change and serves it on http://localhost:1337
 ```
 
 In Webflow: **Apps → Your app → Launch development app**, with the dev URL above.

@@ -6,6 +6,8 @@ import preact from '@preact/preset-vite';
 export default defineConfig({
   base: './',
   plugins: [preact()],
-  build: { outDir: 'dist', emptyOutDir: true, target: 'es2020' },
+  // Watch rebuilds keep the old files in place, so the Webflow dev server never
+  // finds dist/index.html missing between rebuilds.
+  build: { outDir: 'dist', emptyOutDir: !process.argv.includes('--watch'), target: 'es2020' },
   test: { environment: 'node' },
 } as never);
