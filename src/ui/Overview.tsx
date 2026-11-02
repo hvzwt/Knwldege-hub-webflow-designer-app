@@ -1,0 +1,55 @@
+import { findings, summarize } from '../report/tables';
+import type { Hub } from '../types';
+
+export function Overview({ hub, onGo }: { hub: Hub; onGo: (tab: string) => void }) {
+  const s = summarize(hub);
+  const f = findings(hub);
+  const stat = (label: string, value: number | null, tab: string, hint?: string) => (
+    <button class="stat" onClick={() => onGo(tab)} title={hint}>
+      <b>{value ?? '—'}</b>
+      <span>{label}</span>
+    </button>
+  );
+  return (
+    <div class="overview">
+      <div class="stats">
+        {stat('Static pages', s.staticPages, 'pages', 'Live pages built in the Designer')}
+        {stat('Dynamic pages', s.dynamicPages, 'cms', 'One page per CMS item, for collections with a published template')}
+        {stat('CMS templates', s.cmsTemplates, 'pages', 'Template pages that render each CMS item')}
+        {stat('Utility pages', s.utilityPages, 'pages', '404, password and search pages')}
+        {stat('Draft pages', s.draftPages, 'pages')}
+        {stat('Collections', s.collections, 'cms')}
+        {stat('CMS items', s.items, 'cms')}
+        {stat('Components', s.components, 'components')}
+        {stat('Forms', hub.sources.canvas || hub.sources.dataApi ? s.forms : null, 'code')}
+      </div>
+
+      {f.length > 0 && (
+        <section class="panel">
+          <h3>Worth fixing before handover</h3>
+          <ul class="findings">
+            {f.map((x) => (
+              <li key={x}>{x}</li>
+            ))}
+          </ul>
+        </section>
+      )}
+
+      {hub.warnings.length > 0 && (
+        <section class="panel subtle">
+          <h3>About this scan</h3>
+          <ul>
+            {hub.warnings.map((w) => (
+              <li key={w}>{w}</li>
+            ))}
+          </ul>
+        </section>
+      )}
+
+      <p class="muted small">
+        Scanned {new Date(hub.generatedAt).toLocaleString()} ·{' '}
+        {[hub.sources.canvas ? 'every page in the canvas' : 'page settings only', hub.sources.dataApi ? 'Data API' : null].filter(Boolean).join(' + ')}
+      </p>
+    </div>
+  );
+}

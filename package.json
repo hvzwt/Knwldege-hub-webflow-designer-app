@@ -1,0 +1,31 @@
+{
+  "name": "webflow-knowledge-hub",
+  "version": "1.0.0",
+  "description": "Webflow Designer Extension that documents the current site: pages, CMS collections, content-entry guide, components and props, custom code and forms.",
+  "scripts": {
+    "dev": "concurrently -r \"vite build --watch\" \"webflow extension serve\"",
+    "build": "tsc && vite build",
+    "bundle": "npm run build && webflow extension bundle",
+    "typecheck": "tsc",
+    "test": "vitest run",
+    "preview": "vite"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "preact": "^11.1.1",
+    "write-excel-file": "^2.3.10"
+  },
+  "devDependencies": {
+    "@preact/preset-vite": "^2.10.6",
+    "@webflow/designer-extension-typings": "^2.2.2",
+    "@webflow/webflow-cli": "^2.15.0",
+    "concurrently": "^10.0.6",
+    "typescript": "^5.9.3",
+    "vite": "^8.3.5",
+    "vitest": "^5.0.5"
+  },
+  "private": true,
+  "type": "module"
+}
