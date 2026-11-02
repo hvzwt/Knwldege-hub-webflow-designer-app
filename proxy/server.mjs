@@ -11,6 +11,8 @@ const cors = {
   'Access-Control-Allow-Origin': ORIGIN,
   'Access-Control-Allow-Methods': 'GET, OPTIONS',
   'Access-Control-Allow-Headers': 'Authorization, Accept',
+  // Lets Chrome call this localhost server from the Designer (Private Network Access).
+  'Access-Control-Allow-Private-Network': 'true',
 };
 
 createServer(async (req, res) => {
