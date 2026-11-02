@@ -29,6 +29,12 @@ interface Props {
 export function App({ siteId, siteName, demoHub }: Props) {
   const [hub, setHub] = useState<Hub | null>(() => demoHub ?? store.lastHub(siteId));
   const [tab, setTab] = useState<Tab>('overview');
+  // Which page-type chip the Pages tab opens with; bumping `nav` remounts it.
+  const [pagesGroup, setPagesGroup] = useState<{ group?: string; nav: number }>({ nav: 0 });
+  const goTo = (t: Tab, group?: string) => {
+    if (t === 'pages') setPagesGroup((g) => ({ group, nav: g.nav + 1 }));
+    setTab(t);
+  };
   const [settings, setSettings] = useState<Settings>(() => store.settings(siteId));
   const [notes, setNotes] = useState<Notes>(() => store.notes(siteId));
   const [manual, setManual] = useState<CodeRecord[]>(() => store.manualCode(siteId));
@@ -132,14 +138,14 @@ export function App({ siteId, siteName, demoHub }: Props) {
         <>
           <nav class="tabs" role="tablist">
             {TABS.map(([id, label]) => (
-              <button key={id} role="tab" aria-selected={tab === id} class={tab === id ? 'on' : ''} onClick={() => setTab(id)}>
+              <button key={id} role="tab" aria-selected={tab === id} class={tab === id ? 'on' : ''} onClick={() => goTo(id)}>
                 {label}
               </button>
             ))}
           </nav>
           <main class="content">
-            {tab === 'overview' && <Overview hub={hub} onGo={(t) => setTab(t as Tab)} />}
-            {tab === 'pages' && <TableView table={table('pages')} notes={notes} onNote={onNote} summary={{ title: 1, subtitle: 0, badges: [2, 3] }} hideInDetail={[1]} />}
+            {tab === 'overview' && <Overview hub={hub} onGo={(t, g) => goTo(t as Tab, g)} />}
+            {tab === 'pages' && <TableView key={pagesGroup.nav} initialGroup={pagesGroup.group} table={table('pages')} notes={notes} onNote={onNote} summary={{ title: 1, subtitle: 0, badges: [2, 3] }} hideInDetail={[1]} />}
             {tab === 'cms' && <CmsView hub={hub} notes={notes} onNote={onNote} />}
             {tab === 'components' && <TableView table={table('components')} notes={notes} onNote={onNote} summary={{ title: 0 }} hideInDetail={[0]} empty="This site has no components yet." />}
             {tab === 'code' && (

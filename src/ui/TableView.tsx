@@ -11,11 +11,15 @@ interface Props {
   /** Columns hidden from the expanded detail (already in the summary). */
   hideInDetail?: number[];
   empty?: string;
+  /** Group chip to open with (e.g. "Static" when coming from the Overview). */
+  initialGroup?: string;
 }
 
-export function TableView({ table, notes, onNote, summary, hideInDetail = [], empty }: Props) {
+export function TableView({ table, notes, onNote, summary, hideInDetail = [], empty, initialGroup }: Props) {
   const [query, setQuery] = useState('');
-  const [group, setGroup] = useState<string>('All');
+  const [group, setGroup] = useState<string>(() =>
+    initialGroup && table.rows.some((r) => r.group === initialGroup) ? initialGroup : 'All',
+  );
   const [open, setOpen] = useState<string | null>(null);
 
   const groups = useMemo(() => {

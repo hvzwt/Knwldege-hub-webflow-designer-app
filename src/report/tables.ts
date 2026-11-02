@@ -172,7 +172,8 @@ export function pagesTable(hub: Hub, notes: Notes): Table {
       const { orphan, notes: n } = pageNotes(hub, p);
       return {
         key: p.id,
-        group: pageTypeLabel(p).split(' (')[0],
+        // Templates stay under 'CMS Template' even when unpublished, so the chip count matches the Overview.
+        group: p.category === 'cmsTemplate' ? 'CMS Template' : pageTypeLabel(p).split(' (')[0],
         cells: [
           p.url ?? p.path,
           p.name,
